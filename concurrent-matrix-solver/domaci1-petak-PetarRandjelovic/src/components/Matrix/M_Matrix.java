@@ -10,9 +10,6 @@ public class M_Matrix {
     public String value;
     public String matrixName;
 
-
-    public int maxRow;
-    public int maxColumn;
     public M_Matrix(String row, String column, String value, String matrixName) {
         this.row = row;
         this.column = column;

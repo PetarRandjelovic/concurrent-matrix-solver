@@ -26,7 +26,6 @@ public class SaveMatriceThread implements Callable {
 
         File file1 = new File(file);
 
-        //  System.out.println(file1.getAbsolutePath());
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
 
@@ -36,12 +35,11 @@ public class SaveMatriceThread implements Callable {
         for (int j = 0; j < matrix[0].length; j++) {
             for (int i = 0; i < matrix.length; i++) {
 
-                writer.write(i + "," + j + " = " + matrix[i][j].toString() + " "); // Write BigInteger value to file
-                writer.write("\n"); // Separate values by space
+                writer.write(i + "," + j + " = " + matrix[i][j].toString() + " ");
+                writer.write("\n");
             }
-      //      writer.newLine(); // Move to the next row in the file
+
         }
-        //save -name a1c1_result.rix -file zdravo.rix
 
 
         writer.close();

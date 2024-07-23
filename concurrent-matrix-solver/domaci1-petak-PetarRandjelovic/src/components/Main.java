@@ -7,7 +7,10 @@ import components.task.*;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Main {
@@ -15,25 +18,16 @@ public class Main {
     public static final CopyOnWriteArrayList<String> dirList = new CopyOnWriteArrayList<>();
     public static final SystemExplorer systemExplorer = new SystemExplorer(dirList);
     public static Map<Id_Matrix, Map<BigInteger[][], List<M_Matrix>>> matrixMap = new HashMap<>();
-
     public static BigInteger[][] matrixResult;
     public static Map<BigInteger[][], List<M_Matrix>> unutarMatrixMape = new HashMap<>();
-
     public static MatrixBrain matrixBrain = new MatrixBrain();
-
-    public static Map<Id_Matrix, BigInteger[][]> dajMiBig = new HashMap<>();
+    public static Map<Id_Matrix, BigInteger[][]> bigIntegerMap = new HashMap<>();
     public static CopyOnWriteArrayList<M_Matrix> matrixList = new CopyOnWriteArrayList<>();
-
-    public static Map<String, List<M_Matrix>> bozeMeSacuvaj = new ConcurrentHashMap<>();
     private static final TaskCoordinator taskCoordinator = new TaskCoordinator();
-
     public static BlockingQueue<Task> tasks = new LinkedBlockingQueue<>();
     public static ForkJoinPool pool = new ForkJoinPool();
-
     public static ForkJoinPool extractorPool = new ForkJoinPool(16);
-
     public static ForkJoinPool multiplyPool = new ForkJoinPool(16);
-
 
 
     public static boolean running = true;
@@ -42,19 +36,12 @@ public class Main {
 
         Config configuration = Config.getInstance();
 
-
         startThreads();
         startAndReadTerminal();
 
 
     }
 
-    public static void checkActiveThreads() {
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        for (Thread t : threadSet) {
-            System.out.println("Thread: " + t.getName() + " State: " + t.getState() + " " + (t.getState() != Thread.State.TERMINATED));
-        }
-    }
 
     private static void startAndReadTerminal() {
         Scanner cli = new Scanner(System.in);
@@ -79,29 +66,23 @@ public class Main {
 
 
                     dirList.add(tokens[1]);
-               //     System.out.println(Config.getInstance().getStart_dir()+path);
-                 //   System.out.println("Added " + tokens[1] + " to the list");
-                    System.out.println("Added " + Config.getInstance().getStart_dir()+"/"+ tokens[1] + " to the list");
+                    System.out.println("Added " + Config.getInstance().getStart_dir() + "/" + tokens[1] + " to the list");
 
                     break;
                 }
                 case "stop" -> {
                     stopThreads();
-                    // cli.close();
                     running = false;
-                    break;
 
                 }
                 case "check" -> {
-                    if(tokens.length!=2){
+                    if (tokens.length != 2) {
                         System.out.println("Invalid check");
 
                         continue;
                     }
-                 String f1 = tokens[1];
+                    String f1 = tokens[1];
                     System.out.println(f1);
-                    //squareda1c1_result.rix
-                    //   BigInteger[][] ha = matrixBrain.getMultipliedMatrice(f1);
                     BigInteger[][] ha = matrixBrain.getRegularMatrix(f1);
                     if (ha == null) {
                         System.out.println("Matrix is null");
@@ -114,7 +95,7 @@ public class Main {
                             for (int i = 0; i < ha.length; i++) {
 
                                 BigInteger s = ha[i][j];
-                                System.out.print(i+","+j+" = "+ha[i][j].toString()+" ");
+                                System.out.print(i + "," + j + " = " + ha[i][j].toString() + " ");
                                 System.out.println();
                             }
                         }
@@ -201,16 +182,7 @@ public class Main {
                         String f2 = multiplyTask.getfile2().replace(".rix", "").toLowerCase();
                         String name = f1 + f2;
 
-//                        while (matrixBrain.getMultipliedMatrice(tokens[4]) == null) {
-//                            try {
-//                                Thread.sleep(Config.getInstance().getSys_explorer_sleep_time());
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                        System.out.println("Matrix " + tokens[4] + " multiplied successfully!! syhronously");
-                    } else if (tokens.length==6 && tokens[3].equals("-async") && tokens[4].equals("-name") ) {
-                        System.out.println(tokens[5]+ " ULAZIM");
+                    } else if (tokens.length == 6 && tokens[3].equals("-async") && tokens[4].equals("-name")) {
                         String newName = tokens[5];
                         String f1 = fajl1.replace(".rix", "").toLowerCase();
                         String f2 = fajl2.replace(".rix", "").toLowerCase();
@@ -225,7 +197,7 @@ public class Main {
                         multiplyTask = new MultiplyTask(tokens[1], tokens[2], TaskType.MULTIPLY, true, name);
                         matrixBrain.addMultipliedMatrixAsync(name, multiplyTask);
 
-                    }else if (tokens.length == 3) {
+                    } else if (tokens.length == 3) {
                         String f1 = fajl1.replace(".rix", "").toLowerCase();
                         String f2 = fajl2.replace(".rix", "").toLowerCase();
                         String name = f1 + f2;
@@ -234,32 +206,12 @@ public class Main {
 
                         tasks.add(multiplyTask);
 
-//                        while (matrixBrain.getMultipliedMatrice(name) == null) {
-//                            try {
-//                                Thread.sleep(Config.getInstance().getSys_explorer_sleep_time());
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
 
                     } else {
                         System.err.println("Not valid for multiply or not valid argument");
                         continue;
                     }
 
-
-//            //        BigInteger[][] A = matrixBrain.getMultipliedMatrice(name);
-//                 //   System.out.println(A==null);
-//                    BigInteger[][] result =  matrixBrain.getMultipliedMatrice(name);
-//                    for (int i = 0; i < result.length; i++) {
-//                        for (int j = 0; j < result[0].length; j++) {
-//                            BigInteger s = result[i][j];
-//                            System.out.print(i + " " + j + " " + s);
-//                            System.out.println();
-//                        }
-//                    }
-
-                    break;
                 }
                 case "save" -> {
 
@@ -310,18 +262,14 @@ public class Main {
 
         while (!tasks.isEmpty()) {
             try {
-                //  System.out.println("Waiting for tasks to finish");
-                Thread.sleep(1000); // You can adjust the sleep time if needed
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        //  System.out.println(pool.isShutdown());
-        //   pool.shutdown();
-        //   System.out.println(pool.isShutdown());
+
         systemExplorer.stopThread();
 
-        //    System.out.println(pool.isShutdown());
 
     }
 

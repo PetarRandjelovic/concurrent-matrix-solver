@@ -9,7 +9,6 @@ public class Id_Matrix {
     public int column;
     public Boolean isAsynch;
     public File file;
-    //public String fileName;
 
     public Id_Matrix(String name) {
         this.name = name;

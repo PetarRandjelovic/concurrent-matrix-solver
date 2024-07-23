@@ -11,12 +11,8 @@ import java.util.concurrent.RecursiveTask;
 public interface Task {
 
     TaskType getType();
-    // M_Matrix matrixA, matrixB;
-    // File potentialMatrixFile;
     Future<M_Matrix> initiate(RecursiveTask<?> task);
 
     Future<Map<Id_Matrix, BigInteger[][]>> initiateMatrice(RecursiveTask<?> task);
 
-
-    //   Future<M_Matrix> initiate();
 }

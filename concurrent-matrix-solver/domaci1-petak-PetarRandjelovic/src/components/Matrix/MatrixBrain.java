@@ -6,7 +6,6 @@ import components.task.MultiplyTask;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.sql.SQLOutput;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,7 +30,6 @@ public class MatrixBrain {
                 BigInteger[][] matrix = entry.getValue();
 
 
-
                 return matrix;
             }
         }
@@ -40,13 +38,13 @@ public class MatrixBrain {
     }
 
     public void addExtractedMatrix(Map<Id_Matrix, BigInteger[][]> result) {
-boolean found=true;
+        boolean found = true;
         for (Map.Entry<Id_Matrix, BigInteger[][]> entry : result.entrySet()) {
             Id_Matrix idMatrix = entry.getKey();
             for (Map.Entry<Id_Matrix, BigInteger[][]> postojecMatrica : matrixMap.entrySet()) {
                 Id_Matrix idMatrixPostojeca = postojecMatrica.getKey();
                 if (idMatrix.name.equals(idMatrixPostojeca.name)) {
-                 found=false;
+                    found = false;
                     matrixMap.putAll(result);
                     matrixMap.remove(idMatrixPostojeca);
                     System.out.println("Matrix " + idMatrix.name + " updated!");
@@ -56,10 +54,10 @@ boolean found=true;
 
         }
 
-if(found){
-    System.out.println("Created new matrix");
-    matrixMap.putAll(result);
-}
+        if (found) {
+            System.out.println("Created new matrix");
+            matrixMap.putAll(result);
+        }
 
 
     }
@@ -93,26 +91,7 @@ if(found){
 
     public void addMultipliedMatrix(Map<Id_Matrix, BigInteger[][]> result) {
 
-//        boolean found = true;
-//        for (Map.Entry<Id_Matrix, BigInteger[][]> entry : result.entrySet()) {
-//            BigInteger[][] matrix = entry.getValue();
-//            for (Map.Entry<Id_Matrix, BigInteger[][]> postojecMatrica : matrixMap.entrySet()) {
-//
-//                Id_Matrix idMatrixPostojeca = postojecMatrica.getKey();
-//                if (entry.getKey().name.equals(idMatrixPostojeca.name)) {
-//                    found=false;
-//                    matrixMap.putAll(result);
-//                    matrixMap.remove(idMatrixPostojeca);
-//                    System.out.println("Mult Matrix " + entry.getKey().name + " updated!");
-//                  //  break;
-//                }
-//
-//            }
-//        }
-//           if(found)
         multipliedMatrixMap.putAll(result);
-        //    matrixMap.putAll(result);
-
 
     }
 
@@ -239,14 +218,14 @@ if(found){
 
     public void clear(String input, boolean isfile) {
         if (isfile) {
-        //    String inputs=input.replace(".rix", "").toLowerCase();
-            String inputs=input;
+            //    String inputs=input.replace(".rix", "").toLowerCase();
+            String inputs = input;
             for (Map.Entry<Id_Matrix, BigInteger[][]> entry : matrixMap.entrySet()) {
                 Id_Matrix idMatrix = entry.getKey();
-                if(idMatrix.file==null){
+                if (idMatrix.file == null) {
                     continue;
                 }
-         //       System.out.println(idMatrix.file.getName()+" "+inputs);
+                //       System.out.println(idMatrix.file.getName()+" "+inputs);
                 if (idMatrix.file.getName().equalsIgnoreCase(inputs)) {
                     matrixMap.remove(idMatrix);
                     Main.systemExplorer.getLastModifiedMap().remove(idMatrix.file.getName());
@@ -282,23 +261,8 @@ if(found){
                 BigInteger[][] matrix = entry.getValue();
 
                 service.submit(new SaveMatriceThread(name, file, matrix, idMatrix));
-//                writer.write("matrix_name: " + idMatrix.name.replace(".rix", "") + ", rows=" + idMatrix.row + ", cols=" + idMatrix.column);
-//                writer.write("\n");
-//                // Write the content of the matrix to the file
-//                for (int i = 0; i < matrix.length; i++) {
-//                    for (int j = 0; j < matrix[i].length; j++) {
-//                        writer.write(i+","+j+"="+matrix[i][j].toString()); // Write BigInteger value to file
-//                        writer.write("\n"); // Separate values by space
-//                    }
-//                    writer.newLine(); // Move to the next row in the file
-//                }
-//                //save -name a1c1_result.rix -file zdravo.rix
-//                break; // Exit the loop once the desired matrix is found and saved
             }
         }
-        //   writer.close();
-//save -name a1c1_resulta1c1_result_result.rix -file zdravo.rix
-        //  System.out.println("Matrix saved successfully!");
     }
 
     public Map<Id_Matrix, BigInteger[][]> getMatrixMap() {
@@ -308,11 +272,10 @@ if(found){
     public void addExtractedMatrixAsync(Map<Id_Matrix, BigInteger[][]> result) {
 
 
-
-     Future<Map<Id_Matrix,BigInteger[][]>> rezult=  service.submit(new MultMatriceThread(result,matrixMap));
+        Future<Map<Id_Matrix, BigInteger[][]>> rezult = service.submit(new MultMatriceThread(result, matrixMap));
 //
         try {
-            matrixMap=rezult.get();
+            matrixMap = rezult.get();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
@@ -329,7 +292,6 @@ if(found){
             Id_Matrix idMatrix = entry.getKey();
             if (idMatrix.compareNames(f1)) {
                 BigInteger[][] matrix = entry.getValue();
-
 
 
                 return matrix;

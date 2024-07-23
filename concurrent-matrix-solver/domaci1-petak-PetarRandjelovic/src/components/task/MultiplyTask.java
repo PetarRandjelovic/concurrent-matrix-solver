@@ -39,15 +39,12 @@ public class MultiplyTask  implements Task{
 
     @Override
     public Future<M_Matrix> initiate(RecursiveTask<?> task) {
-//             this.future= (Future<M_Matrix>) pool.submit(task);
-//        return future;
         return null;
     }
 
     @Override
     public Future<Map<Id_Matrix, BigInteger[][]>> initiateMatrice(RecursiveTask<?> task) {
         this.futureMatrice= (Future<Map<Id_Matrix, BigInteger[][]>>) Main.multiplyPool.submit(task);
-    //    System.out.println(this.futureMatrice);
         return futureMatrice;
     }
 

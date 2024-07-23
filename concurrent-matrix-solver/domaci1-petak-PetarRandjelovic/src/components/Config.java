@@ -11,12 +11,13 @@ public class Config {
     private int maximum_rows_size;
     private String start_dir;
 
-    public static Config getInstance(){
+    public static Config getInstance() {
         if (instance == null)
             instance = new Config();
         return instance;
     }
-    private Config(){
+
+    private Config() {
         properties = new Properties();
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream("resources/application.properties"));
@@ -25,14 +26,15 @@ public class Config {
         }
         load();
     }
-    private void load(){
+
+    private void load() {
         sys_explorer_sleep_time = Integer.parseInt(read_line("sys_explorer_sleep_time"));
         maximum_file_chunk_size = Integer.parseInt(read_line("maximum_file_chunk_size"));
         maximum_rows_size = Integer.parseInt(read_line("maximum_rows_size"));
         start_dir = read_line("start_dir");
     }
-    private String read_line(String name){
-        //System.out.println("READING: "+properties.getProperty(name));
+
+    private String read_line(String name) {
         return properties.getProperty(name);
     }
 

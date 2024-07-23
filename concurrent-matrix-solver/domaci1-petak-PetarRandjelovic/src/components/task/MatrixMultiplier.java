@@ -11,30 +11,12 @@ import java.util.concurrent.RecursiveTask;
 
 public class MatrixMultiplier extends RecursiveTask<Map<Id_Matrix, BigInteger[][]>> {
 
-
-    private int endRowB;
-    private int endColumnB;
-    private int endRowA;
-    private int endColumnA;
     private String file1;
     private String file2;
-
-    private int startRow;
-    private int startColumn;
-    private int endRow;
-    private int endColumn;
-
     private int start;
-
     private int end;
-
-    private BigInteger[][] matrix1;
-    private BigInteger[][] matrix2;
-    private BigInteger[][] matrixRes;
-    private int startRowA, startColumnA, startRowB, startColumnB, size, colsA, colsB;
     private BigInteger[][] A, B, result;
     private String newName;
-    private static final int LIMIT = 1024;
     private MultiplyTask multiplyTask;
 
     public MatrixMultiplier(MultiplyTask multiplyTask, String file1, String file2, BigInteger[][] A, BigInteger[][] B, BigInteger[][] resultMat,
@@ -68,11 +50,10 @@ public class MatrixMultiplier extends RecursiveTask<Map<Id_Matrix, BigInteger[][
     protected Map<Id_Matrix, BigInteger[][]> compute() {
 
 
-        // System.out.println(end-start);
         if ((end - start < Config.getInstance().getMaximum_rows_size())) {
             BigInteger[][] finalResult = multiplyMatrices(A, B, result, start, end);
         } else {
-            //    System.out.println("Splitting the task into subtasks ...");
+
             int mid = (end - start) / 2 + start;
 
             MatrixMultiplier left = new MatrixMultiplier(file1, file2, A, B, result, start, mid, newName);
